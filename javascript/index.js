@@ -1,4 +1,4 @@
-setInterval(function () {
+function updateTime() {
   // los Angeles
   let losAngelesElement = document.querySelector("#los-angeles");
   let losAngelesDateElement = losAngelesElement.querySelector(".date");
@@ -9,9 +9,6 @@ setInterval(function () {
   losAngelesTimeElement.innerHTML = losAngelesTime.format(
     "h:mm:ss [<small>]A[</small>]"
   );
-}, 1000);
-
-setInterval(function () {
   // nairobi
   let nairobiElement = document.querySelector("#nairobi");
   let nairobiDateElement = nairobiElement.querySelector(".date");
@@ -22,4 +19,28 @@ setInterval(function () {
   nairobiTimeElement.innerHTML = nairobiTime.format(
     "h:mm:ss [<small>]A[</small>]"
   );
-}, 1000);
+}
+
+function updateCity(event) {
+  let cityTimeZone = event.target.value;
+  let cityName = cityTimeZone.replace("_", " ").split("/")[1];
+  let cityTime = moment().tz(cityTimeZone);
+  let citiesElement = document.querySelector("#cities");
+  citiesElement.innerHTML = `
+  <div class="city">
+        <div>
+          <h2>${cityTimeZone}</h2>
+          <div class="date">${cityTime.format("MMMM Do YYYY")}</div>
+        </div>
+        <div class="time">${cityTime.format("h:mm:ss")}<small>${cityTime.format(
+    "A"
+  )}</small></div>
+      </div>
+   `;
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+
+let citiesSelectElement = document.querySelector("#city");
+citiesSelectElement.addEventListener("change", updateCity);
